@@ -84,10 +84,30 @@ tidy <- rbind( build_data_set('test'),
                build_data_set('train'))
 
 ## Generate a summary of the means of the variables by subject and activity
-# Summarize the data 
-summary_means <- aggregate( . ~ subject + activity , data = tidy, mean)
-# Drop the 'set' indicator variable, as its mean is meaningless
-summary_means$set <- NULL
-# Write this summary data to a file.
-write.table(summary_means, 'summary_means.txt', row.names=FALSE)
+outfile = 'summary_means.txt'
+
+# Either one of the following two functions will generate the output data.
+# There are two functions because I was experimenting with using "reshape"
+# versus using "aggregate".
+summary_data_method1 <- function() {
+  # Summarize the data 
+  summary_means <- aggregate( . ~ subject + activity , data = tidy, mean)
+  # Drop the 'set' variable, as its mean is meaningless
+  summary_means$set <- NULL
+  summary_means
+}
+
+library(reshape2)
+summary_data_method2 <- function() {
+  # Melt the data along the 3 ID variables.
+  x <- melt(tidy, id = c('subject','activity','set'))
+  # Drop the set ID variable
+  x$set <- NULL
+  # Cast back to from molten, using the mean to aggregate
+  y <- dcast( x , subject + activity ~ variable, mean)
+  y
+}
+
+# Write the summary data to a file.
+write.table(summary_data_method1(), outfile, row.names=FALSE)
 
