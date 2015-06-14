@@ -37,7 +37,7 @@ read_features <- function() {
 # file 'activity_labels.txt'.
 read_activity_labels <- function() {
   # Read the activity labels
-  activity_labels <- read.table(file.path(path,'activity_labels.txt'),
+  activity_labels <- read.table(file.path(datapath,'activity_labels.txt'),
                                 colClasses = c('numeric','character'),
                                 col.names = c('code','label'))
   activity_labels
@@ -55,20 +55,20 @@ activity_labels <- read_activity_labels()
 build_data_set <- function(which.set) {
   # Read the core data from the file "X_{train|test}.txt".
   # The column names for this data are in the features data frame.
-  data_file <- file.path(path,which.set,sprintf('X_%s.txt',which.set))
+  data_file <- file.path(datapath,which.set,sprintf('X_%s.txt',which.set))
   dat <- read.table(data_file, col.names = features$name)
   # Keep only columns matching features to keep
   dat <- dat[,features$keep]
 
   # Read the activities from the file "y_{train|test}.txt"
-  act_file <- file.path(path,which.set,sprintf('y_%s.txt',which.set))
+  act_file <- file.path(datapath,which.set,sprintf('y_%s.txt',which.set))
   act <- read.table(act_file, col.names = c('activity'))
   # Convert the integer codes to factors using the activity_label data frame
   act$activity <- factor(act$activity, levels=activity_labels$code,
                          labels = activity_labels$label)
 
   # Read the subjects from the file "subject_{train|test}.txt"
-  subj_file <- file.path(path,which.set,sprintf('subject_%s.txt',which.set))
+  subj_file <- file.path(datapath,which.set,sprintf('subject_%s.txt',which.set))
   subj <- read.table(subj_file, col.names = c('subject'))
   
   # Return a merged data frame of containing:
