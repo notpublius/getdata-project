@@ -11,6 +11,7 @@ the resulting "tidy" data.
 **summary_means.txt** The "tidy" data as described in the programming assignment.
 
 The basic approach of the analysis is to:
+
 1. Download the file
 2. Read the features from the `features.txt` file. Flag features to keep (mean and std) based on feature name.
 3. Read the activity labels from the `activity_labels.txt` file.
